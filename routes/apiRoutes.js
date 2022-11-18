@@ -1,6 +1,11 @@
 const api = require('express').Router();
 const fs = require('fs');
 const path = require('path');
+const uuid = () => {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  };
 
 api.post('/notes', (req, res) => {
     console.info(`${req.method} request received to add a review`);
@@ -10,7 +15,8 @@ api.post('/notes', (req, res) => {
 
     const newNotes = {
         title,
-        text
+        text,
+        id: uuid()
     }
     prevNotes.push(newNotes);
     fs.writeFileSync(path.join(__dirname, '../db/db.json'), JSON.stringify(prevNotes));
